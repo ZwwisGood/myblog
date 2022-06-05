@@ -5,14 +5,24 @@
         <li>
           <img class="hvr-wobble-to-bottom-right" src="/images/logo.jpg" />
         </li>
-        <li class="hvr-underline-from-center">主页</li>
-        <li class="hvr-underline-from-center">主页</li>
-        <li class="hvr-underline-from-center">主页</li>
+        <li class="hvr-underline-from-center"><i class="iconfont icon-zhuye1"></i>主页</li>
+        <li class="hvr-underline-from-center">文章笔记</li>
+        <li class="hvr-underline-from-center">生活</li>
       </ul>
     </div>
     <div class="middle">
       <input type="text" />
       <button class="searchBtn iconfont icon-fangdajing"></button>
+    </div>
+    <div class="right">
+      <ul>
+        <li class="hvr-buzz-out">关于我</li>
+        <li class="hvr-buzz-out">联系我</li>
+        <li class="hvr-buzz-out">博客管理</li>
+      </ul>
+    </div>
+    <div class="github hvr-curl-top-right">
+      <img class="" src="/images/github.jpg" title="Follow me on GitHub">
     </div>
   </div>
 </template>
@@ -29,17 +39,24 @@ export default {}
 .header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
   width: 100%;
   height: 80px;
   background-color: #fff;
   box-shadow: 0 4px 6px rgb(0 0 0 / 15%);
   .left {
-    width: 700px;
+    width: 650px;
+    i{
+      margin-right: 2px;
+      font-size: 18px;
+      color: #666;
+    }
     ul {
       display: flex;
       align-items: center;
-      margin-left: 260px;
       height: 80px;
+      margin-left: 25%;
       li:nth-child(n + 2) {
         display: flex;
         align-items: center;
@@ -60,6 +77,7 @@ export default {}
   }
   .middle {
     display: flex;
+    flex:1;
     align-items: center;
     position: relative;
     input {
@@ -79,6 +97,28 @@ export default {}
       border-left: none;
       background: #fff;
       font-size: 20px;
+      cursor: pointer;
+    }
+  }
+  .right{
+    width: 350px;
+    ul{
+      display: flex;
+      li{
+        display: flex;
+        align-items: center;
+        width: 73px;
+        font-size: 18px;
+        margin: 0 10px;
+        height: 30px;
+        cursor: pointer;
+      }
+    }
+  }
+  .github{
+    height: 80px;
+    img{
+      width: 80px;
       cursor: pointer;
     }
   }

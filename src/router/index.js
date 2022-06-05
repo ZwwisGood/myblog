@@ -17,4 +17,4 @@ const router = new VueRouter({
     }
 })
 
-module.exports = router
+export default router
