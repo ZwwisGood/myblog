@@ -5,7 +5,7 @@
         <li>
           <img class="hvr-wobble-to-bottom-right" src="/images/logo.jpg" />
         </li>
-        <li class="hvr-underline-from-center"><i class="iconfont icon-zhuye1"></i>主页</li>
+        <li @click="goHome" class="hvr-underline-from-center"><i class="iconfont icon-zhuye1"></i>主页</li>
         <li class="hvr-underline-from-center">文章笔记</li>
         <li class="hvr-underline-from-center">生活</li>
       </ul>
@@ -16,9 +16,9 @@
     </div>
     <div class="right">
       <ul>
-        <li class="hvr-buzz-out">关于我</li>
+        <li class="hvr-buzz-out">留言板</li>
         <li class="hvr-buzz-out">联系我</li>
-        <li class="hvr-buzz-out">博客管理</li>
+        <li class="hvr-buzz-out" @click="goManage">博客管理</li>
       </ul>
     </div>
     <div class="github hvr-curl-top-right">
@@ -28,7 +28,16 @@
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    goManage() {
+      this.$router.push('/manage')
+    },
+    goHome(){
+      this.$router.push('/home')
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
@@ -37,6 +46,7 @@ export default {}
     height: 2px;
 }
 .header {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -45,6 +55,7 @@ export default {}
   height: 80px;
   background-color: #fff;
   box-shadow: 0 4px 6px rgb(0 0 0 / 15%);
+  z-index: 999;
   .left {
     width: 650px;
     i{

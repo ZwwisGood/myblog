@@ -7,5 +7,27 @@ export default [
     {
         path: '/home',
         component: () => import('@/views/Home'),
+    },
+    {
+        path: '/manage',
+        component: () => import('@/views/Manage'),
+    },
+    {
+        path: '/center',
+        component: () => import('@/views/Center'),
+        children: [
+            {
+                path: '/center/addBlog',
+                component: () => import('@/views/Center/AddBlog'),
+            },
+            {
+                path: '/center/deleteBlog',
+                component: () => import('@/views/Center/DeleteBlog'),
+            }
+        ]
+    },
+    {
+        path: '/detail',
+        component: () => import('@/views/Detail'),
     }
 ]
