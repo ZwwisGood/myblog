@@ -274,8 +274,8 @@ router.get('/api/getMessages', function (req, res, next) {
 //添加留言
 router.post('/api/addMessage', function (req, res, next) {
   //获取留言内容
-  let { name, content, time } = req.body
-  db.query('insert into message (name, content, time) values (?,?,?)', [name, content, time], function (err, results) {
+  let { name, content, time, avatar } = req.body
+  db.query('insert into message (name, content, time, avatar) values (?,?,?,?)', [name, content, time, avatar], function (err, results) {
     if (err) {
       res.send({
         code: -1,

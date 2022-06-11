@@ -8,7 +8,7 @@
       <div class="list">
         <ul>
           <li v-for="message in messages" :key="message.id" class="message">
-            <img class="avatar" src="/images/logo.jpg" alt="" />
+            <img class="avatar" :src="message.avatar" alt="" />
             <span class="name">{{ message.name }}</span>
             <div class="content">{{ message.content }}</div>
             <div class="time">{{ message.time }}</div>
@@ -28,9 +28,60 @@
         <div class="t">请在下方写下你的留言吧!</div>
         <div class="avatar" @click="selectAvatar">
           <span>选择头像：</span>
-          <img src="/images/logo.jpg" alt="" />
-          <img src="/images/card1.jpg" alt="" />
-          <img src="/images/card2.jpg" alt="" />
+          <img
+            src="/images/avatar9.jpeg"
+            data-id="1"
+            :class="{ active: active == 1 }"
+            alt=""
+          />
+          <img
+            src="/images/avatar1.jpeg"
+            :class="{ active: active == 2 }"
+            data-id="2"
+            alt=""
+          />
+          <img
+            src="/images/avatar2.jpeg"
+            :class="{ active: active == 3 }"
+            data-id="3"
+            alt=""
+          />
+          <img
+            src="/images/avatar3.jpeg"
+            :class="{ active: active == 4 }"
+            data-id="4"
+            alt=""
+          />
+          <img
+            src="/images/avatar4.jpeg"
+            :class="{ active: active == 5 }"
+            data-id="5"
+            alt=""
+          />
+          <img
+            src="/images/avatar5.jpeg"
+            :class="{ active: active == 6 }"
+            data-id="6"
+            alt=""
+          />
+          <img
+            src="/images/avatar6.jpeg"
+            :class="{ active: active == 7 }"
+            data-id="7"
+            alt=""
+          />
+          <img
+            src="/images/avatar7.jpeg"
+            :class="{ active: active == 8 }"
+            data-id="8"
+            alt=""
+          />
+          <img
+            src="/images/avatar8.jpeg"
+            :class="{ active: active == 9 }"
+            data-id="9"
+            alt=""
+          />
         </div>
         <div class="who">
           <span>留言人：</span>
@@ -56,7 +107,8 @@ export default {
       pageSize: 5, //每页显示的数据量
       name: localStorage.getItem('name') || '', //留言人
       content: '', //留言内容
-      avatar: '', //头像
+      avatar: '/images/logo.jpg', //头像
+      active: 1, //选中头像
     }
   },
   methods: {
@@ -110,6 +162,7 @@ export default {
             name: this.name,
             content: this.content,
             time,
+            avatar: this.avatar,
           },
         })
         if (res.code == 0) {
@@ -136,9 +189,15 @@ export default {
     },
     //选择头像
     selectAvatar(e) {
-      console.log(e.nodeName)
-      let avatar = e.target.src
-      this.avatar = avatar
+      //获取自定义属性
+      let id = e.target.dataset.id
+      this.active=id
+      //判断获取的是不是img标签
+      if (e.target.nodeName == 'IMG') {
+        //获取src里/images以及以后的部分
+        let src = '/images' + e.target.src.split('/images')[1]
+        this.avatar = src
+      }
     },
   },
   created() {
@@ -173,17 +232,17 @@ export default {
         border-bottom: 1px solid #ccc;
         img {
           margin: 0 10px;
-          width: 40px;
-          height: 40px;
+          width: 50px;
+          height: 50px;
           vertical-align: bottom;
           font-size: 0;
         }
         span {
           font-size: 18px;
-          line-height: 40px;
+          line-height: 50px;
         }
         .content {
-          margin: 30px 60px;
+          margin: 30px 70px;
           font-size: 15px;
         }
         .time {
@@ -261,7 +320,11 @@ export default {
         margin: 0 5px;
         width: 45px;
         height: 45px;
+        border: 3px solid transparent;
         vertical-align: middle;
+      }
+      .active {
+        border: 3px solid rgb(96, 205, 180);
       }
     }
   }
