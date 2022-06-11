@@ -1,9 +1,8 @@
 <template>
-  <div class="home" ref="scroll">
-    <div class="pic">
-      <h1>Zww</h1>
-      <h2>God helps those who help themselves</h2>
-      <img src="/images/pic.png" alt="" />
+  <div class="blog">
+    <div class="top">
+      <img src="/images/pic2.jpeg" alt="" class="pic" />
+      <h1 class="title">Life 生活</h1>
     </div>
     <div class="cards">
       <div
@@ -27,7 +26,7 @@
 
 <script>
 export default {
-  name: 'home',
+  name: 'Blog',
   data() {
     return {
       blogs: [], //所有博客
@@ -54,11 +53,13 @@ export default {
   },
   //初始化数据(已缓存，代替created)
   async activated() {
+    console.log('activated')
     //获取所有博客
     let res = await this.$api({
-      url: '/api/getAllBlogs',
+      url: '/api/getLifeBlogs',
       method: 'get',
     })
+    console.log(res);
     this.blogs = res.data
     //监听滚动条，显示回到顶部按钮
     window.addEventListener('scroll', () => {
@@ -86,31 +87,29 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.home {
+.blog {
   width: 1200px;
   margin: 0 auto;
-  .pic {
+  .top {
     position: relative;
-    margin-bottom: 30px;
-    h1,
-    h2 {
-      position: absolute;
-      left: 50%;
-      top: 28%;
-      color: #eee;
-      text-shadow: 3px 5px 10px black;
-      transform: translateX(-50%);
-      font-size: 30px;
+    .title{
+        position: absolute;
+        top: 30%;
+        left: 50%;
+        color: #eee;
+        text-shadow: 3px 5px 10px black;
+        font-size: 50px;
+        transform: translate(-50%, -50%);
     }
-    h1 {
-      top: 13%;
-      font-size: 50px;
-    }
-    img {
+    .pic {
       width: 100%;
-      border-radius: 6px;
+      height: 300px;
+      //不拉伸图片
+      object-fit: cover;
+      object-position: 0 50%;
     }
   }
+
   .cards {
     margin: 0 auto;
     margin-bottom: 30px;

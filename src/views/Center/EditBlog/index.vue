@@ -1,5 +1,5 @@
 <template>
-  <div class="add">
+  <div class="edit">
     <div>
       <span>标题：</span>
       <el-input
@@ -31,11 +31,8 @@
       :toolbars="toolbars"
       ref="md"
     />
-    <el-button class="btn" type="primary" @click="addBlog">发表</el-button>
-    <el-button class="btn" type="info" @click="save">暂存</el-button>
-    <el-button class="btn" type="danger" @click="clear"
-      >清空并删除已暂存内容</el-button
-    >
+    <el-button class="btn" type="primary" @click="save">保存修改</el-button>
+    <el-button class="btn" type="danger" @click="back">返回</el-button>
   </div>
 </template>
 
@@ -66,8 +63,28 @@ export default {
     }
   },
   methods: {
-    //添加博客
-    async addBlog() {
+    //处理转换html格式文本（markdown格式中有些无法转换成html标签）
+    handleHtmlContent() {
+      //修正html里的++++改为下划线标签
+      let num = 0
+      let str = this.htmlcontent
+      let a = str
+      while (/\+\+/.test(a)) {
+        if (num == 0) {
+          a = a.replace(/\+\+/, '<u>')
+          num++
+        } else if ((num & 1) == 1) {
+          a = a.replace(/\+\+/, '</u>')
+          num++
+        } else if ((num & 1) == 0) {
+          a = a.replace(/\+\+/, '<u>')
+          num++
+        }
+      }
+      this.htmlcontent = a
+    },
+    //保存修改
+    save() {
       if(this.title == ''){
         this.$msg.error('标题不能为空')
         return
@@ -80,33 +97,51 @@ export default {
         this.$msg.error('内容不能为空')
         return
       }
+      MessageBox.confirm('确定保存修改吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true,
+      })
+        .then(() => {
+          this.confirmSave()
+        })
+        .catch(() => {})
+    },
+    async confirmSave() {
+      //获取路由参数的id
+      const id = this.$route.query.id
       // 转化为html格式
       this.htmlcontent = this.converter.makeHtml(this.content)
-      // 生成一个随机图当作该博客封面
-      //生成一个1-3的随机整数
-      let random = Math.floor(Math.random() * 3) + 1
       try {
-        let result = await this.$api({
-          url: '/api/addblog',
+        let res = await this.$api({
+          url: '/api/updateBlog',
           method: 'post',
           data: {
+            id,
             type: this.type,
             title: this.title,
             description: this.description,
             content: this.content,
             htmlcontent: this.htmlcontent,
-            img: `/images/card${random}.jpg`,
           },
         })
-        this.$msg({
-          message: '添加成功',
-          type: 'success',
-        })
-        localStorage.removeItem('blog')
+        if (res.code == 0) {
+          this.$msg({
+            message: '修改成功',
+            type: 'success',
+          })
+        } else {
+          this.$msg.error({ message: '修改失败' })
+        }
       } catch (err) {
         console.log(err)
-        this.$msg.error('添加失败')
+        this.$msg.error('修改失败')
       }
+    },
+    //返回按钮
+    back() {
+      this.$router.go(-1)
     },
     //markdown的添加图片事件
     async imgAdd(pos, $file) {
@@ -127,63 +162,34 @@ export default {
         console.log(e)
       }
     },
-    //暂存
-    save() {
-      if(this.title == ''){
-        this.$msg.error('标题不能为空')
-        return
-      }
-      if(this.type == ''){
-        this.$msg.error('类型不能为空')
-        return
-      }
-      if(this.content == ''){
-        this.$msg.error('内容不能为空')
-        return
-      }
-      let blog = {
-        title: this.title,
-        type: this.type,
-        description: this.description,
-        content: this.content,
-      }
-      localStorage.setItem('blog', JSON.stringify(blog))
-      this.$msg({
-        message: '暂存成功',
-        type: 'success',
-      })
-    },
-    clear() {
-      MessageBox.confirm(
-        '确定清空所有内容吗? 你已暂存的内容也会被清除',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          center: true,
-        }
-      )
-        .then(() => {
-          this.title = ''
-          this.type = ''
-          this.description = ''
-          this.content = ''
-          localStorage.removeItem('blog')
-          this.$msg({
-            message: '已清空',
-            type: 'success',
-          })
-        })
-        .catch(() => {})
-    },
   },
-  created() {
-    if (localStorage.getItem('blog')) {
-      this.title = JSON.parse(localStorage.getItem('blog')).title
-      this.type = JSON.parse(localStorage.getItem('blog')).type
-      this.description = JSON.parse(localStorage.getItem('blog')).description
-      this.content = JSON.parse(localStorage.getItem('blog')).content
+  //进入页面后，获取博客内容
+  async created() {
+    console.log('created')
+    //获取路由参数的id
+    const id = this.$route.query.id
+    try {
+      let res = await this.$api({
+        url: '/api/getBlogById',
+        method: 'get',
+        params: {
+          id: id,
+        },
+      })
+      if (res.code == 0) {
+        console.log(res)
+        this.type = res.data[0].type
+        this.title = res.data[0].title
+        this.description = res.data[0].description
+        this.content = res.data[0].content
+        this.htmlcontent = res.data[0].htmlcontent
+        this.handleHtmlContent()
+      } else {
+        this.$msg.error(res.msg)
+      }
+    } catch (err) {
+      console.log(err)
+      this.$msg.error('出现了错误')
     }
   },
 }
@@ -193,7 +199,7 @@ export default {
 .el-input {
   margin: 10px 0;
 }
-.add {
+.edit {
   margin: 0 auto;
   ::v-deep .markdown {
     margin-top: 10px;

@@ -34,18 +34,12 @@ export default {
         if (num == 0) {
           a = a.replace(/\+\+/, '<u>')
           num++
-          console.log(a, '改1', num)
-          console.log(/\+\+/.test(a))
         } else if ((num & 1) == 1) {
           a = a.replace(/\+\+/, '</u>')
           num++
-          console.log(a, '改2', num)
-          console.log(/\+\+/.test(a))
         } else if ((num & 1) == 0) {
           a = a.replace(/\+\+/, '<u>')
           num++
-          console.log(a, '改3', num)
-          console.log(/\+\+/.test(a))
         }
       }
       this.htmlcontent = a

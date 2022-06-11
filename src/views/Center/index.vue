@@ -9,8 +9,8 @@
       >
         <el-menu-item-group>
           <template slot="title">博客管理</template>
-          <el-menu-item index="1-1" @click="addBlog">添加博客</el-menu-item>
-          <el-menu-item index="1-2" @click="deleteBlog">删除博客</el-menu-item>
+          <el-menu-item index="1-1" @click="addBlog" :class="{activeBtn: $route.path.includes('/addBlog')}">添加博客</el-menu-item>
+          <el-menu-item index="1-2" @click="deleteBlog" :class="{activeBtn: $route.path.includes('/deleteBlog')||$route.path.includes('/editBlog')}">编辑和删除博客</el-menu-item>
         </el-menu-item-group>
         <el-menu-item-group title="留言管理">
           <el-menu-item index="1-3">删除留言</el-menu-item>
@@ -46,5 +46,8 @@ export default {
       height: 100%;
     }
   }
+}
+::v-deep .activeBtn{
+  color: rgb(255, 208, 75)!important
 }
 </style>

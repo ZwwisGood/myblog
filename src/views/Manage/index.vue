@@ -3,7 +3,7 @@
     <div class="manage">
       <h1>博客管理</h1>
       <div>请输入管理员密码</div>
-      <input v-model="password" type="password" />
+      <input v-model="password" type="password" @keyup.enter="check"/>
       <el-button class="btn" type="primary" @click="check">确认</el-button>
     </div>
   </div>

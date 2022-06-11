@@ -17,4 +17,14 @@ const router = new VueRouter({
     }
 })
 
+
+router.beforeEach((to, from, next) => {
+    if (from.meta.keepAlive) { //判断是否为需要缓存的路由
+        const scrollTop = document.documentElement.scrollTop; //获取该路由页面的scrollTop
+        from.meta.scrollTop = scrollTop || 0;
+    }
+    next();
+});
+
+
 export default router

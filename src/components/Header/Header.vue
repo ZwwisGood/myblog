@@ -6,8 +6,8 @@
           <img class="hvr-wobble-to-bottom-right" src="/images/logo.jpg" />
         </li>
         <li @click="goHome" class="hvr-underline-from-center"><i class="iconfont icon-zhuye1"></i>主页</li>
-        <li class="hvr-underline-from-center">文章笔记</li>
-        <li class="hvr-underline-from-center">生活</li>
+        <li @click="goBlog" class="hvr-underline-from-center">文章笔记</li>
+        <li @click="goLife" class="hvr-underline-from-center">生活</li>
       </ul>
     </div>
     <div class="middle">
@@ -16,13 +16,13 @@
     </div>
     <div class="right">
       <ul>
-        <li class="hvr-buzz-out">留言板</li>
+        <li class="hvr-buzz-out" @click="goMessageBoard">留言板</li>
         <li class="hvr-buzz-out">联系我</li>
         <li class="hvr-buzz-out" @click="goManage">博客管理</li>
       </ul>
     </div>
-    <div class="github hvr-curl-top-right">
-      <img class="" src="/images/github.jpg" title="Follow me on GitHub">
+    <div @click="goGithub" class="github hvr-curl-top-right">
+      <img src="/images/github.jpg" title="Follow me on GitHub">
     </div>
   </div>
 </template>
@@ -36,6 +36,18 @@ export default {
     goHome(){
       this.$router.push('/home')
     },
+    goBlog(){
+      this.$router.push('/blog')
+    },
+    goLife(){
+      this.$router.push('/life')
+    },
+    goGithub(){
+      window.open('https://github.com/ZwwisGood/')
+    },
+    goMessageBoard(){
+      this.$router.push('/messageBoard')
+    }
   },
 }
 </script>

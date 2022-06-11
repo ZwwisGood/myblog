@@ -3,13 +3,19 @@ import App from './App.vue'
 import 'hover.css'
 import router from '@/router'
 //引入element-ui
-import {Input, Button, Message, Menu, MenuItem, MenuItemGroup } from 'element-ui'
+import { Popover,Loading, TableColumn, Table, Pagination, Input, Button, Message, MessageBox, Menu, MenuItem, MenuItemGroup } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.component(Button.name, Button)
 Vue.use(Menu);
 Vue.use(MenuItem);
 Vue.use(MenuItemGroup);
 Vue.use(Input);
+Vue.use(Pagination);
+Vue.use(Table);
+Vue.use(TableColumn);
+Vue.component(MessageBox.name, MessageBox)
+Vue.component(Popover.name, Popover)
+Vue.use(Loading);
 Vue.prototype.$msg = Message
 Vue.config.productionTip = false
 // markdown
@@ -23,9 +29,6 @@ Vue.prototype.converter = new showdown.Converter();
 //引入二次封装的axios，并挂载到vue实例身上
 import api from '@/api/requests.js'
 Vue.prototype.$api = api
-
-
-
 
 
 

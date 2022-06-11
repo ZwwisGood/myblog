@@ -7,6 +7,10 @@ export default [
     {
         path: '/home',
         component: () => import('@/views/Home'),
+        meta: {
+            keepAlive: true,
+            scrollTop: 0,
+        }
     },
     {
         path: '/manage',
@@ -23,11 +27,35 @@ export default [
             {
                 path: '/center/deleteBlog',
                 component: () => import('@/views/Center/DeleteBlog'),
+            },
+            {
+                path: '/center/editBlog',
+                component: () => import('@/views/Center/EditBlog'),
             }
         ]
     },
     {
         path: '/detail',
         component: () => import('@/views/Detail'),
+    },
+    {
+        path: '/blog',
+        component: () => import('@/views/Blog'),
+        meta: {
+            keepAlive: true,
+            scrollTop: 0,
+        }
+    },
+    {
+        path: '/life',
+        component: () => import('@/views/Life'),
+        meta: {
+            keepAlive: true,
+            scrollTop: 0,
+        }
+    },
+    {
+        path: '/messageboard',
+        component: () => import('@/views/MessageBoard'),
     }
 ]
