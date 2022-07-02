@@ -1,5 +1,5 @@
 <template>
-  <div class="edit">
+  <div class="edit animate__animated animate__fadeIn">
     <div>
       <span>标题：</span>
       <el-input
@@ -165,7 +165,6 @@ export default {
   },
   //进入页面后，获取博客内容
   async created() {
-    console.log('created')
     //获取路由参数的id
     const id = this.$route.query.id
     try {
@@ -177,7 +176,6 @@ export default {
         },
       })
       if (res.code == 0) {
-        console.log(res)
         this.type = res.data[0].type
         this.title = res.data[0].title
         this.description = res.data[0].description

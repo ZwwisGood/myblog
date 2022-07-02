@@ -9,7 +9,10 @@ module.exports = defineConfig({
     //配置代理
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:3000',
+        //服务器地址
+        // target: 'http://120.24.182.3:3001',
+        // target: 'http://127.0.0.1:3001',
+        target: 'http://81.71.165.39:3001',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/api'

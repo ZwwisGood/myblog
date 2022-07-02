@@ -1,5 +1,5 @@
 <template>
-  <div class="add">
+  <div class="add animate__animated animate__fadeIn">
     <div>
       <span>标题：</span>
       <el-input
@@ -68,23 +68,23 @@ export default {
   methods: {
     //添加博客
     async addBlog() {
-      if(this.title == ''){
+      if (this.title == '') {
         this.$msg.error('标题不能为空')
         return
       }
-      if(this.type == ''){
+      if (this.type == '') {
         this.$msg.error('类型不能为空')
         return
       }
-      if(this.content == ''){
+      if (this.content == '') {
         this.$msg.error('内容不能为空')
         return
       }
       // 转化为html格式
       this.htmlcontent = this.converter.makeHtml(this.content)
       // 生成一个随机图当作该博客封面
-      //生成一个1-3的随机整数
-      let random = Math.floor(Math.random() * 3) + 1
+      //生成一个1-7的随机整数
+      let random = Math.floor(Math.random() * 7) + 1
       try {
         let result = await this.$api({
           url: '/api/addblog',
@@ -110,13 +110,16 @@ export default {
     },
     //markdown的添加图片事件
     async imgAdd(pos, $file) {
+      var formData = new FormData()
+      formData.append('file', $file)
+      console.log(formData.get('file'))
       try {
-        let fromData = new FormData()
-        fromData.append('file', $file)
+        let formData = new FormData()
+        formData.append('file', $file)
         let res = await this.$api({
           url: '/api/upload',
           method: 'post',
-          data: fromData,
+          data: formData,
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -129,15 +132,15 @@ export default {
     },
     //暂存
     save() {
-      if(this.title == ''){
+      if (this.title == '') {
         this.$msg.error('标题不能为空')
         return
       }
-      if(this.type == ''){
+      if (this.type == '') {
         this.$msg.error('类型不能为空')
         return
       }
-      if(this.content == ''){
+      if (this.content == '') {
         this.$msg.error('内容不能为空')
         return
       }

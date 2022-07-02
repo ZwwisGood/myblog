@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="manage">
+    <div class="manage animate__animated animate__fadeInUp">
       <h1>博客管理</h1>
       <div>请输入管理员密码</div>
       <input v-model="password" type="password" @keyup.enter="check"/>
@@ -42,7 +42,7 @@ export default {
   align-items: center;
   margin: 30px auto;
   width: 300px;
-  height: 500px;
+  height: 550px;
   box-shadow: 0 0 10px #ccc;
   h1 {
     font-size: 30px;

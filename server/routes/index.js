@@ -8,7 +8,6 @@ var multer = require('multer');
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
-  console.log(__dirname);
 })
 //主页获取所有博客
 router.get('/api/getAllBlogs', function (req, res, next) {
@@ -90,7 +89,9 @@ router.post('/api/addblog', function (req, res, next) {
   //获取博客内容（markdown格式和html格式）
   let { type, title, description, content, htmlcontent, img } = req.body
   //获取当前时间
-  let time = new Date().toLocaleString()
+  let str = new Date();
+  const time = str.getFullYear() + "/"
+    + (str.getMonth() + 1) + "/" + str.getDate() + " " + str.getHours() + ":" + str.getMinutes() + ":" + str.getSeconds()
   //存入数据库
   db.query(`insert into blog (type, title, description, content, htmlcontent, time, img) values ('${type}','${title}', '${description}', '${content}', '${htmlcontent}', '${time}', '${img}')`, function (err, results) {
     if (err) {
@@ -113,8 +114,9 @@ router.post('/api/addblog', function (req, res, next) {
 const storage = multer.diskStorage({  //diskStorage硬盘存储
   // 存储位置
   destination(req, file, callback) {
-    // 参数一 错误信息   参数二  上传路径（此处指定upload文件夹）
-    callback(null, "public")
+    // 参数一 错误信息   参数二  上传路径（此处指定public文件夹）
+    // callback(null, "public/images")
+    callback(null, "../public/images")
   },
   // 确定文件名
   filename(req, file, cb) {
@@ -129,7 +131,10 @@ const upload = multer({ storage })
 接收一个名为fieldname的上传文件，所上传的文件会被保存在req.file。 */
 router.post('/api/upload', upload.single("file"), function (req, res, next) {
   // 需要返回图片的访问地址    域名+文件名
-  const url = "http://localhost:3000/" + req.file.filename
+  //服务器地址
+  // const url = "http://localhost:3001/images/" + req.file.filename
+  // const url = "http://120.24.182.3:3001/images/" + req.file.filename
+  const url = "http://81.71.165.39:3001/images/" + req.file.filename
   res.json({ url })
 })
 
@@ -274,17 +279,107 @@ router.get('/api/getMessages', function (req, res, next) {
 //添加留言
 router.post('/api/addMessage', function (req, res, next) {
   //获取留言内容
-  let { name, content, time, avatar } = req.body
-  db.query('insert into message (name, content, time, avatar) values (?,?,?,?)', [name, content, time, avatar], function (err, results) {
+  let { name, content, time, avatar, first } = req.body
+  if (first == true) {
+    //留言人已存在
+    db.query('select * from message where name = ?', name, function (err, result) {
+      if (result.length > 0) {
+        res.send({
+          code: -1,
+          msg: '留言人已存在'
+        })
+      } else {
+        db.query('insert into message (name, content, time, avatar) values (?,?,?,?)', [name, content, time, avatar], function (e, results) {
+          if (e) {
+            res.send({
+              code: -1,
+              msg: '添加留言失败'
+            })
+          }
+          res.send({
+            code: 0,
+            msg: '添加成功'
+          })
+        })
+      }
+    })
+  }
+
+})
+
+//根据页数获取留言
+router.get('/api/getMessagesByPage', function (req, res, next) {
+  //获取页数
+  let page = req.query.page
+  //获取每页显示的条数
+  let pageSize = req.query.pageSize
+  //计算出起始位置
+  let start = (page - 1) * pageSize
+  //查询总数量
+  db.query('select count(*) as total from message', function (err, result) {
     if (err) {
       res.send({
         code: -1,
-        msg: '添加留言失败'
+        msg: '获取留言失败'
+      })
+    } else {
+      //获取总数量
+      let total = result
+      db.query(`select * from message order by id desc limit ${start},${pageSize}`, function (err, results) {
+        if (err) {
+          res.send({
+            code: -1,
+            msg: '获取留言失败'
+          })
+        } else {
+          res.send({
+            code: 0,
+            msg: '获取留言成功',
+            data: {
+              total: total[0].total,
+              results
+            }
+          })
+        }
+      })
+    }
+  })
+})
+
+//删除留言
+router.get('/api/deleteMsg', function (req, res, next) {
+  //获取删除的留言id
+  let id = req.query.id
+  db.query('delete from message where id = ?', id, function (err, results) {
+    if (err) {
+      res.send({
+        code: -1,
+        msg: '删除留言失败'
       })
     }
     res.send({
       code: 0,
-      msg: '添加成功'
+      msg: '删除留言成功'
+    })
+  })
+})
+
+//搜索
+router.get('/api/search', function (req, res, next) {
+  //获取搜索内容
+  let keyword = req.query.keyword
+  //查询数据库
+  db.query(`select * from blog where title like '%${keyword}%'`, function (err, results) {
+    if (err) {
+      res.send({
+        code: -1,
+        msg: '搜索失败'
+      })
+    }
+    res.send({
+      code: 0,
+      msg: '搜索成功',
+      data: results
     })
   })
 })

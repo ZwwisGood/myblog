@@ -1,12 +1,20 @@
 <template>
-  <div class="delete">
+  <div class="delete animate__animated animate__fadeIn">
     <el-table
-      class="table"
+      class="table center animate__animated animate__fadeInRight"
       :data="blogs"
-      height="512"
+      max-height="512"
       highlight-current-row
-      v-loading="loading"
+      border
+      stripe
     >
+      <template slot="empty">
+        <el-empty
+          :image-size="250"
+          description=""
+          v-show="blogs.length"
+        ></el-empty>
+      </template>
       <el-table-column type="index" width="100" label="序号"></el-table-column>
       <el-table-column prop="title" label="博客标题" width="300">
       </el-table-column>
@@ -14,17 +22,16 @@
       </el-table-column>
       <el-table-column prop="description" label="博客描述" width="300">
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="120">
+      <el-table-column prop="time" label="发表时间" width="200">
+      </el-table-column>
+      <el-table-column fixed="right" label="操作" width="170">
         <template slot-scope="scope">
-          <el-button @click="goBlog(scope.row)" type="text" size="small"
-            >查看</el-button
-          >
           <el-button @click="editBlog(scope.row)" type="text" size="small"
             >编辑</el-button
           >
           <el-button
             @click.native.prevent="deleteBlog(scope.row)"
-            type="text"
+            type="danger"
             size="small"
           >
             删除
@@ -33,6 +40,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
+      v-show="blogs.length"
       class="pagination"
       background
       layout="prev, pager, next"
@@ -53,7 +61,6 @@ export default {
       page: 1, //当前页数
       total: 0, //总数量
       pageSize: 8, //每页显示的数据量
-      loading: true, //表格加载数据的动画
     }
   },
   methods: {
@@ -69,7 +76,6 @@ export default {
             pageSize: this.pageSize,
           },
         })
-        console.log(res)
         this.blogs = res.data.results
         this.total = res.data.total
         this.$nextTick(() => {
@@ -80,15 +86,6 @@ export default {
         this.$msg('不好意思，出错了')
       }
     },
-    //查看
-    goBlog(blog) {
-      this.$router.push({
-        path: '/detail',
-        query: {
-          id: blog.id,
-        },
-      })
-    },
     //编辑
     editBlog(blog) {
       this.$router.push({
@@ -98,7 +95,7 @@ export default {
         },
       })
     },
-    //
+    //删除博客
     deleteBlog(blog) {
       MessageBox.confirm('确定删除这篇博客吗?', '提示', {
         confirmButtonText: '确定',
@@ -113,7 +110,6 @@ export default {
     },
     //是否确认删除博客
     async confirmDelete(blog) {
-      console.log('删除', blog)
       try {
         let res = await this.$api({
           url: '/api/deleteBlog',
@@ -122,7 +118,6 @@ export default {
             id: blog.id,
           },
         })
-        console.log(res)
         this.$msg({
           message: '删除成功',
           type: 'success',
@@ -131,12 +126,12 @@ export default {
         this.handleCurrentChange(this.page)
       } catch (e) {
         console.log(e)
+        this.$msg('不好意思，出错了')
       }
     },
   },
   //获得首页数据
   async created() {
-    console.log('create')
     try {
       let res = await this.$api({
         url: '/api/getBlogsByPage',
@@ -146,7 +141,6 @@ export default {
           pageSize: this.pageSize,
         },
       })
-      console.log(res)
       this.blogs = res.data.results
       this.total = res.data.total
       this.$nextTick(() => {
@@ -161,19 +155,29 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.animate__animated{
+  animation-duration: 0.7s!important
+}
 //修正表格底部多出一条横线
-::v-deep .el-table__fixed-right{
-  height: 100% !important; 
- }
+::v-deep .el-table__fixed-right {
+  height: 100% !important;
+}
 .delete {
   margin: 10px auto;
   border: 3px solid #eee;
+  width: 1200px;
   height: 511px;
   box-shadow: 0 0 10px #eee;
+  overflow-x: hidden;
   .pagination {
-    display: flex;
-    justify-content: center;
+    position: absolute;
+    left: 52%;
+    bottom: 10%;
     margin-top: 30px;
   }
+}
+//elementUI的table文字居中
+::v-deep .center td, ::v-deep .center th {
+  text-align: center;
 }
 </style>

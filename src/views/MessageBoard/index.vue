@@ -1,5 +1,5 @@
 <template>
-  <div class="messageboard">
+  <div class="messageboard animate__animated animate__fadeInRightBig">
     <div class="main">
       <div class="top">
         <h1>留言板</h1>
@@ -26,7 +26,7 @@
       </el-pagination>
       <div class="writeMessage">
         <div class="t">请在下方写下你的留言吧!</div>
-        <div class="avatar" @click="selectAvatar">
+        <div class="avatar" @click="selectAvatar" :style="disabled1">
           <span>选择头像：</span>
           <img
             src="/images/avatar9.jpeg"
@@ -85,10 +85,15 @@
         </div>
         <div class="who">
           <span>留言人：</span>
-          <input v-model.trim="name" type="text" />
+          <input v-model.trim="name" type="text" :disabled="disabled" />
+          <span
+            >&nbsp;&nbsp;（请注意：头像和留言人在留言后<span class="red"
+              >不可修改</span
+            >）</span
+          >
         </div>
         <span>内&nbsp;&nbsp;&nbsp;容：</span>
-        <textarea v-model="content" name="msgContent"></textarea>
+        <textarea v-model.trim="content" name="msgContent"></textarea>
         <div class="submit">
           <div @click="addMessage" class="button">发表</div>
         </div>
@@ -107,8 +112,11 @@ export default {
       pageSize: 5, //每页显示的数据量
       name: localStorage.getItem('name') || '', //留言人
       content: '', //留言内容
-      avatar: '/images/logo.jpg', //头像
-      active: 1, //选中头像
+      avatar: localStorage.getItem('avatar') || '/images/avatar9.jpeg', //头像
+      active: localStorage.getItem('active') || 1, //选中头像
+      disabled: false, //是否禁用留言人输入框
+      disabled1: '', //是否禁用头像选择框
+      first: true, //是否第一次留言
     }
   },
   methods: {
@@ -138,7 +146,6 @@ export default {
             pageSize: this.pageSize,
           },
         })
-        console.log(res)
         this.messages = res.data.results
         this.total = res.data.total
       } catch (err) {
@@ -152,7 +159,10 @@ export default {
     },
     //添加留言
     async addMessage() {
-      localStorage.setItem('name', this.name)
+      if (this.name == '' || this.content == '') {
+        this.$msg.error('留言人和留言内容不能为空!')
+        return
+      }
       try {
         let time = new Date().toLocaleString()
         let res = await this.$api({
@@ -163,6 +173,7 @@ export default {
             content: this.content,
             time,
             avatar: this.avatar,
+            first: this.first,
           },
         })
         if (res.code == 0) {
@@ -172,26 +183,39 @@ export default {
             message: '留言成功',
             type: 'success',
           })
+          localStorage.setItem('name', this.name)
+          localStorage.setItem('avatar', this.avatar)
+          localStorage.setItem('active', this.active)
+          this.first = false
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          })
         } else {
           this.$msg({
-            message: '留言失败',
+            message: res.msg,
             type: 'error',
           })
+          this.name = ''
+          this.content = ''
+          this.first = true
         }
       } catch (err) {
         console.log(err)
-        this.$msg('不好意思，出错了')
+        this.$msg.error('不好意思，出错了')
       }
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      })
+      //已经留言过的用户不能再次更名
+      if (localStorage.getItem('name')) {
+        this.disabled = true
+        this.disabled1 = 'pointer-events: none'
+        this.first = false
+      }
     },
     //选择头像
     selectAvatar(e) {
       //获取自定义属性
       let id = e.target.dataset.id
-      this.active=id
+      this.active = id
       //判断获取的是不是img标签
       if (e.target.nodeName == 'IMG') {
         //获取src里/images以及以后的部分
@@ -203,14 +227,24 @@ export default {
   created() {
     //获取所有留言
     this.getMessages()
+    //已经留言过的用户不能再次更名
+    if (localStorage.getItem('name')) {
+      this.disabled = true
+      this.disabled1 = 'pointer-events: none'
+      this.first = false
+    }
   },
 }
 </script>
 
 <style lang="less" scoped>
+::v-deep .el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #60cdb4;
+}
 .main {
   margin: 0 auto;
   width: 800px;
+  min-height: 800px;
   box-shadow: 0 4px 6px rgb(0 0 0 / 30%);
   .top {
     text-align: center;
@@ -300,7 +334,7 @@ export default {
     }
     .submit {
       display: flex;
-      justify-content: end;
+      justify-content: flex-end;
     }
     .button {
       margin: 15px 0;
@@ -328,5 +362,9 @@ export default {
       }
     }
   }
+}
+.red {
+  color: rgb(255, 0, 0);
+  font-weight: 600;
 }
 </style>

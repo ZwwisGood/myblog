@@ -1,27 +1,29 @@
 <template>
-  <div class="home" ref="scroll">
-    <div class="pic">
-      <h1>Zww</h1>
-      <h2>God helps those who help themselves</h2>
-      <img src="/images/pic.png" alt="" />
-    </div>
-    <div class="cards">
-      <div
-        class="card"
-        v-for="blog in blogs"
-        :key="blog.id"
-        @click="goDetail(blog.id)"
-      >
-        <img :src="blog.img" alt="" />
-        <span class="type">{{ blog.type }}</span>
-        <h1 class="title">{{ blog.title }}</h1>
-        <div class="discribe">{{ blog.description }}</div>
-        <div class="time">{{ blog.time }}</div>
+  <div class="home">
+      <div class="animate__animated animate__fadeIn">
+        <div class="pic">
+          <h1>Zww</h1>
+          <h2>God helps those who help themselves</h2>
+          <img src="/images/pic.png" alt="" />
+        </div>
+        <div class="cards">
+          <div
+            class="card"
+            v-for="blog in blogs"
+            :key="blog.id"
+            @click="goDetail(blog.id)"
+          >
+            <img v-lazy="blog.img" alt="" />
+            <span class="type">{{ blog.type }}</span>
+            <h1 class="title">{{ blog.title }}</h1>
+            <div class="discribe">{{ blog.description }}</div>
+            <div class="time">{{ blog.time }}</div>
+          </div>
       </div>
     </div>
-    <div class="goTop" @click="goTop" v-show="goTopBtn">
+    <!-- <div class="goTop" @click="goTop" v-show="goTopBtn">
       <p>回到顶部</p>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -44,13 +46,13 @@ export default {
         },
       })
     },
-    //浏览器滚动600像素后显示按钮
-    goTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      })
-    },
+    // //浏览器滚动600像素后显示按钮
+    // goTop() {
+    //   window.scrollTo({
+    //     top: 0,
+    //     behavior: 'smooth',
+    //   })
+    // },
   },
   //初始化数据(已缓存，代替created)
   async activated() {
@@ -87,8 +89,9 @@ export default {
 
 <style lang="less" scoped>
 .home {
-  width: 1200px;
   margin: 0 auto;
+  width: 1200px;
+  min-height: 1500px;
   .pic {
     position: relative;
     margin-bottom: 30px;
@@ -171,19 +174,19 @@ export default {
       }
     }
   }
-  .goTop {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    right: 10px;
-    bottom: 80px;
-    width: 60px;
-    height: 60px;
-    color: #fff;
-    background-color: #666;
-    border-radius: 50%;
-    cursor: pointer;
-  }
+  // .goTop {
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  //   position: fixed;
+  //   right: 10px;
+  //   bottom: 80px;
+  //   width: 60px;
+  //   height: 60px;
+  //   color: #fff;
+  //   background-color: #666;
+  //   border-radius: 50%;
+  //   cursor: pointer;
+  // }
 }
 </style>

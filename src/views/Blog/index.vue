@@ -1,5 +1,5 @@
 <template>
-  <div class="blog">
+  <div class="blog animate__animated animate__jackInTheBox">
     <div class="top">
       <img src="/images/pic1.jpeg" alt="" class="pic" />
       <h1 class="title">Note 文章笔记</h1>
@@ -11,7 +11,7 @@
         :key="blog.id"
         @click="goDetail(blog.id)"
       >
-        <img :src="blog.img" alt="" />
+        <img v-lazy="blog.img" alt="" />
         <span class="type">{{ blog.type }}</span>
         <h1 class="title">{{ blog.title }}</h1>
         <div class="discribe">{{ blog.description }}</div>
@@ -53,13 +53,11 @@ export default {
   },
   //初始化数据(已缓存，代替created)
   async activated() {
-    console.log('activated')
     //获取所有博客
     let res = await this.$api({
       url: '/api/getNotes',
       method: 'get',
     })
-    console.log(res);
     this.blogs = res.data
     //监听滚动条，显示回到顶部按钮
     window.addEventListener('scroll', () => {
@@ -90,16 +88,18 @@ export default {
 .blog {
   width: 1200px;
   margin: 0 auto;
+  min-height: 800px;
   .top {
+    margin-bottom: 20px;
     position: relative;
-    .title{
-        position: absolute;
-        top: 30%;
-        left: 50%;
-        color: #eee;
-        text-shadow: 3px 5px 10px black;
-        font-size: 50px;
-        transform: translate(-50%, -50%);
+    .title {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      color: #eee;
+      text-shadow: 3px 5px 10px black;
+      font-size: 50px;
+      transform: translate(-50%, -50%);
     }
     .pic {
       width: 100%;
@@ -120,7 +120,7 @@ export default {
       position: relative;
       display: flex;
       flex-direction: column;
-      margin: 0 25px 50px 25px;
+      margin: 0 25px 10px 25px;
       width: 300px;
       height: 450px;
       border: 2px solid #eee;

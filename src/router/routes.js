@@ -19,6 +19,7 @@ export default [
     {
         path: '/center',
         component: () => import('@/views/Center'),
+        redirect:"/center/addBlog",
         children: [
             {
                 path: '/center/addBlog',
@@ -31,6 +32,10 @@ export default [
             {
                 path: '/center/editBlog',
                 component: () => import('@/views/Center/EditBlog'),
+            },
+            {
+                path: '/center/deleteMsg',
+                component: () => import('@/views/Center/DeleteMsg'),
             }
         ]
     },
@@ -57,5 +62,9 @@ export default [
     {
         path: '/messageboard',
         component: () => import('@/views/MessageBoard'),
+    },
+    {
+        path: '/search',
+        component: () => import('@/views/Search'),
     }
 ]
