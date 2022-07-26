@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 export default {
   data() {
     return {
@@ -67,7 +68,7 @@ export default {
     goMessageBoard() {
       this.$router.push('/messageBoard')
     },
-    goSearch() {
+    goSearch: _.throttle(function () {
       if (this.keyword == '') {
         return
       }
@@ -77,7 +78,10 @@ export default {
           keyword: this.keyword,
         },
       })
-    },
+    }, 700, {
+      leading: true,
+      trailing: false,
+    }),
   },
 }
 </script>
@@ -110,8 +114,8 @@ export default {
       align-items: center;
       height: 80px;
       margin-left: 25%;
-      li{
-        white-space:nowrap;
+      li {
+        white-space: nowrap;
       }
       li:nth-child(n + 2) {
         display: flex;

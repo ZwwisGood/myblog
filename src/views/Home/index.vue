@@ -2,9 +2,7 @@
   <div class="home">
       <div class="animate__animated animate__fadeIn">
         <div class="pic">
-          <h1>Zww</h1>
-          <h2>God helps those who help themselves</h2>
-          <img src="/images/pic.png" alt="" />
+          <h1>Welcome to Zww's blog</h1>
         </div>
         <div class="cards">
           <div
@@ -21,9 +19,6 @@
           </div>
       </div>
     </div>
-    <!-- <div class="goTop" @click="goTop" v-show="goTopBtn">
-      <p>回到顶部</p>
-    </div> -->
   </div>
 </template>
 
@@ -95,19 +90,23 @@ export default {
   .pic {
     position: relative;
     margin-bottom: 30px;
-    h1,
-    h2 {
+    width: 100%;
+    height: 100px;
+    h1{
       position: absolute;
       left: 50%;
       top: 28%;
       color: #eee;
       text-shadow: 3px 5px 10px black;
       transform: translateX(-50%);
-      font-size: 30px;
+      background-color: rgb(239, 239, 239);
+      border-radius: 20px;
     }
     h1 {
-      top: 13%;
-      font-size: 50px;
+      height: 80px;
+      line-height: 80px;
+      top: 20%;
+      font-size: 45px;
     }
     img {
       width: 100%;
@@ -174,19 +173,5 @@ export default {
       }
     }
   }
-  // .goTop {
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  //   position: fixed;
-  //   right: 10px;
-  //   bottom: 80px;
-  //   width: 60px;
-  //   height: 60px;
-  //   color: #fff;
-  //   background-color: #666;
-  //   border-radius: 50%;
-  //   cursor: pointer;
-  // }
 }
 </style>
