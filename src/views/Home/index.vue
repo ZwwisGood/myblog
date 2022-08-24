@@ -1,22 +1,23 @@
 <template>
   <div class="home">
-      <div class="animate__animated animate__fadeIn">
-        <div class="pic">
-          <h1>Welcome to Zww's blog</h1>
+    <div class="animate__animated animate__fadeIn">
+      <div class="top">
+        <img src="/images/pic2.png" alt="" class="pic" />
+        <h1 class="title">欢迎来到张伟伟的博客</h1>
+      </div>
+      <div class="cards">
+        <div
+          class="card"
+          v-for="blog in blogs"
+          :key="blog.id"
+          @click="goDetail(blog.id)"
+        >
+          <img v-lazy="blog.img" alt="" />
+          <span class="type">{{ blog.type }}</span>
+          <h1 class="title">{{ blog.title }}</h1>
+          <div class="discribe">{{ blog.description }}</div>
+          <div class="time">{{ blog.time }}</div>
         </div>
-        <div class="cards">
-          <div
-            class="card"
-            v-for="blog in blogs"
-            :key="blog.id"
-            @click="goDetail(blog.id)"
-          >
-            <img v-lazy="blog.img" alt="" />
-            <span class="type">{{ blog.type }}</span>
-            <h1 class="title">{{ blog.title }}</h1>
-            <div class="discribe">{{ blog.description }}</div>
-            <div class="time">{{ blog.time }}</div>
-          </div>
       </div>
     </div>
   </div>
@@ -87,30 +88,24 @@ export default {
   margin: 0 auto;
   width: 1200px;
   min-height: 1500px;
-  .pic {
+  .top {
+    margin-bottom: 20px;
     position: relative;
-    margin-bottom: 30px;
-    width: 100%;
-    height: 100px;
-    h1{
+    .title {
       position: absolute;
+      top: 30%;
       left: 50%;
-      top: 28%;
       color: #eee;
       text-shadow: 3px 5px 10px black;
-      transform: translateX(-50%);
-      background-color: rgb(239, 239, 239);
-      border-radius: 20px;
+      font-size: 50px;
+      transform: translate(-50%, -50%);
     }
-    h1 {
-      height: 80px;
-      line-height: 80px;
-      top: 20%;
-      font-size: 45px;
-    }
-    img {
+    .pic {
       width: 100%;
-      border-radius: 6px;
+      height: 300px;
+      //不拉伸图片
+      object-fit: cover;
+      object-position: 0 50%;
     }
   }
   .cards {

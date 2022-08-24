@@ -66,10 +66,10 @@ export default {
 
     // 点击图片放大
     $('.main').on('click', 'img', function (e) {
-      let width = e.target.naturalWidth
-      let height = e.target.naturalHeight
-      let src = $(this).attr('src')
-      let img = `<img src="${src}" style="width:${width};height:${height}}"">`
+      let width = e.target.natrualWidth
+      let height = e.target.natrualHeight
+      let src = $(this).attr('src')  // 获取点击图片的src属性值
+      let img = `<img class="oimg" src="${src}" style="width:${width};height:${height};}"">`
       MessageBox.alert(img, {
         dangerouslyUseHTMLString: true,
         customClass: 'messageBox', //添加默认类名
@@ -84,39 +84,40 @@ export default {
 
 <style lang="less" scoped>
 .body {
+  overflow-x:hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: -10px;
   background-color: rgb(239, 239, 239);
-  .detail {
-    position: relative;
-    padding-top: 50px;
-    background-color: #fff;
-    a{
-      position: absolute;
-      top: 30px;
-      right: 60px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+}
+.detail {
+  position: relative;
+  padding-top: 50px;
+  background-color: #fff;
+  a {
+    position: absolute;
+    top: 30px;
+    right: 60px;
+    font-size: 16px;
+    cursor: pointer;
   }
-  .title {
-    font-size: 30px;
-    margin-bottom: 20px;
-  }
-  .time {
-    color: #999;
-  }
-  .title,
-  .time {
-    text-align: center;
-  }
-  .main {
-    padding: 50px 50px;
-    width: 800px;
-    min-height: 600px;
-  }
+}
+.title {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+.time {
+  color: #999;
+}
+.title,
+.time {
+  text-align: center;
+}
+.main {
+  padding: 50px 50px;
+  width: 800px;
+  min-height: 600px;
 }
 
 ::v-deep .el-message-box {
@@ -124,18 +125,25 @@ export default {
 }
 </style>
 <style lang="less">
+.main > br {
+  display: none;
+}
+.main > p img {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%)
+}
+blockquote > br {
+  display: none;
+}
 .messageBox {
   width: 90vw;
   height: 93vh;
   text-align: center;
   margin: auto 0;
   overflow: scroll;
-  overflow-x: hidden;
   img {
     cursor: auto;
   }
-}
-img {
-  max-width: 100%;
 }
 </style>

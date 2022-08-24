@@ -145,6 +145,7 @@ export default {
           margin-bottom: 30px;
           padding: 0 30px;
           text-align: center;
+          font-size: 18px;
         }
         .discribe {
           height: 30px;

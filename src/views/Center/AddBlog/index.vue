@@ -50,6 +50,7 @@ export default {
       description: '', //描述
       content: '', //输入的数据 markdown格式
       toolbars: {
+        mark: true, // 标记
         bold: true, // 粗体
         header: true, // 标题
         underline: true, // 下划线
@@ -112,7 +113,6 @@ export default {
     async imgAdd(pos, $file) {
       var formData = new FormData()
       formData.append('file', $file)
-      console.log(formData.get('file'))
       try {
         let formData = new FormData()
         formData.append('file', $file)

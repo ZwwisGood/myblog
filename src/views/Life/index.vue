@@ -1,5 +1,5 @@
 <template>
-  <div class="blog animate__animated animate__rotateInUpLeft">
+  <div class="blog animate__animated animate__rotateInUpLeft" style="overflow-x:hidden">
     <div class="top">
       <img src="/images/pic2.jpeg" alt="" class="pic" />
       <h1 class="title">Life 生活</h1>
